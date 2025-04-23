@@ -26,16 +26,23 @@ public class PN : Ordination {
     }
 
     public override double doegnDosis() {
-        double antalOrdinationer = dates.Count();
-        // Calculate the time span between start and end dates
-        TimeSpan tidsRum = slutDen - startDen;
-        // Now you can get the total days using:
-        double antalDage = tidsRum.TotalDays;
+        // If no doses have been given, return 0
+        if (dates.Count == 0) {
+            return 0;
+        }
         
+        // Get earliest and latest dates when doses were given
+        DateTime start = dates.Min(d => d.dato);
+        DateTime slut = dates.Max(d => d.dato);
+        
+        // Calculate the number of days between first and last dose
+        TimeSpan periode = slut - start;
+        double antalDage = periode.TotalDays > 0 ? periode.TotalDays : 1; // Prevent division by zero
+        
+        // Calculate daily dose
+        double antalOrdinationer = dates.Count();
         double døgnDosis = (antalOrdinationer * antalEnheder) / antalDage;
         return døgnDosis;
-        
-        
     }
 
     public override double samletDosis() {
