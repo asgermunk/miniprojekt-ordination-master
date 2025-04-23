@@ -156,8 +156,16 @@ public class DataService
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
-        // TODO: Implement!
-        return null!;
+        var laegemiddel = db.Laegemiddler.Find(laegemiddelId)!; 
+
+        var dagligSkaev = new DagligSkæv(startDato, slutDato, laegemiddel, doser);
+        
+        Patient patient = db.Patienter.Find(patientId);
+        patient.ordinationer.Add(dagligSkaev);
+        
+        db.SaveChanges();
+    
+        return dagligSkaev;
     }
 
     public string AnvendOrdination(int id, Dato dato) {
