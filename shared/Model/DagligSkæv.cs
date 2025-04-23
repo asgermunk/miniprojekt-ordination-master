@@ -28,8 +28,8 @@ public class DagligSkæv : Ordination {
 		{
 			doegn += dos.antal;
 		}
-			
-		return doegn
+
+		return doegn;
 	}
 
 	public override String getType() {
