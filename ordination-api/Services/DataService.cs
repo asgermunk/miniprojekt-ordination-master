@@ -137,10 +137,16 @@ public class DataService
 
     public DagligFast OpretDagligFast(int patientId, int laegemiddelId, 
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
-        DateTime startDato, DateTime slutDato) {
+        DateTime startDato, DateTime slutDato)
+    {
+        var laegemiddel = db.Laegemiddler.Find(laegemiddelId); 
 
-        // TODO: Implement!
-        return null!;
+        var dagligFast = new DagligFast(startDato, slutDato, laegemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
+
+        db.DagligFaste.Add(dagligFast);
+        db.SaveChanges();
+    
+        return dagligFast;
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
