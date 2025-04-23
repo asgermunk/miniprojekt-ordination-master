@@ -17,15 +17,26 @@ public class PN : Ordination {
     /// Returner false ellers og datoen givesDen ignoreres
     /// </summary>
     public bool givDosis(Dato givesDen) {
-        // TODO: Implement!
+        // Check if the date is within the validity period
+        if (givesDen.dato >= startDen && givesDen.dato <= slutDen) {
+            dates.Add(givesDen);
+            return true; // Datoen er registreret
+        }
         return false;
     }
 
     public override double doegnDosis() {
-    	// TODO: Implement!
-        return -1;
+        double antalOrdinationer = dates.Count();
+        // Calculate the time span between start and end dates
+        TimeSpan tidsRum = slutDen - startDen;
+        // Now you can get the total days using:
+        double antalDage = tidsRum.TotalDays;
+        
+        double døgnDosis = (antalOrdinationer * antalEnheder) / antalDage;
+        return døgnDosis;
+        
+        
     }
-
 
     public override double samletDosis() {
         return dates.Count() * antalEnheder;
