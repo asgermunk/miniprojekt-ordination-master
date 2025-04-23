@@ -142,8 +142,10 @@ public class DataService
         var laegemiddel = db.Laegemiddler.Find(laegemiddelId); 
 
         var dagligFast = new DagligFast(startDato, slutDato, laegemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
-
-        db.DagligFaste.Add(dagligFast);
+        
+        var patient = db.Patienter.Find(patientId);
+        patient.ordinationer.Add(dagligFast);
+        
         db.SaveChanges();
     
         return dagligFast;
