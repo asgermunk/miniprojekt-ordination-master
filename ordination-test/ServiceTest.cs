@@ -53,4 +53,17 @@ public class ServiceTest
 
         Console.WriteLine("Her kommer der ikke en exception. Testen fejler.");
     }
+    [TestMethod]
+    public void OpretPN()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        Assert.AreEqual(4, service.GetPNs().Count());
+
+        service.OpretPN(patient.PatientId, lm.LaegemiddelId,
+            2, DateTime.Now, DateTime.Now.AddDays(3));
+
+        Assert.AreEqual(5, service.GetPNs().Count());
+    }
 }

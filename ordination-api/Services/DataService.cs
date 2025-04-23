@@ -131,7 +131,11 @@ public class DataService
     }
 
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato) {
-        // TODO: Implement!
+        PN newPN = new PN(startDato, slutDato, antal, db.Laegemiddler.Find(laegemiddelId)!);
+        Patient patient = db.Patienter.Find(patientId)!;
+        patient.ordinationer.Add(newPN);
+        
+        db.SaveChanges();
         return null!;
     }
 
