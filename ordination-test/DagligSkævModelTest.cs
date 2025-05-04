@@ -21,8 +21,8 @@ namespace ordination_test
                 new DateTime(2025, 1, 3), 
                 GetDummyLaegemiddel());
 
-            dagligSkaev.opretDosis(new DateTime(2025), 1.0); 
-            dagligSkaev.opretDosis(new DateTime(2025), 1.0); 
+            dagligSkaev.opretDosis(new DateTime(2025, 12, 5), 1.0); 
+            dagligSkaev.opretDosis(new DateTime(2025, 12, 6), 1.0); 
 
             double result = dagligSkaev.samletDosis(); 
 
@@ -39,7 +39,7 @@ namespace ordination_test
 
             Assert.ThrowsException<ArgumentException>(() =>
             {
-                dagligSkaev.opretDosis(new DateTime(2025), -1.0); 
+                dagligSkaev.opretDosis(new DateTime(2025, 7, 2), -1.0); 
             });
         }
 
@@ -59,7 +59,7 @@ namespace ordination_test
            
             double result = dagligSkaev.doser.Sum(d => d.antal);
             
-            Assert.AreEqual(3, result);
+            Assert.AreEqual(4, result);
         }
 
 
@@ -72,13 +72,14 @@ namespace ordination_test
                 new DateTime(2025, 1, 1),
                 GetDummyLaegemiddel());
 
-            dagligSkaev.opretDosis(new DateTime(2025), 1); 
-            dagligSkaev.opretDosis(new DateTime(2025), 1); 
-            dagligSkaev.opretDosis(new DateTime(2025), 1); 
+            dagligSkaev.opretDosis(new DateTime(2025, 1,1 ),1); 
+            dagligSkaev.opretDosis(new DateTime(2025, 1, 1), 1); 
+            dagligSkaev.opretDosis(new DateTime(2025, 1, 1), 1); 
+            dagligSkaev.opretDosis(new DateTime(2025, 1, 2), 1); 
 
             double result = dagligSkaev.doegnDosis();
 
-            Assert.AreEqual(3, result);
+            Assert.AreEqual(4, result);
         }
     }
 }
