@@ -129,9 +129,13 @@ public class DataService
     public List<Laegemiddel> GetLaegemidler() {
         return db.Laegemiddler.ToList();
     }
+ 
 
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato) {
         PN newPN = new PN(startDato, slutDato, antal, db.Laegemiddler.Find(laegemiddelId)!);
+        if(antal <= 0) {
+            throw new ArgumentException("Antal skal være større end 0.");
+        }
         Patient patient = db.Patienter.Find(patientId)!;
         patient.ordinationer.Add(newPN);
         
@@ -157,7 +161,9 @@ public class DataService
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
         var laegemiddel = db.Laegemiddler.Find(laegemiddelId)!; 
-
+        if(startDato > slutDato) {
+            throw new ArgumentException("Startdato skal være før slutdato.");
+        }
         var dagligSkaev = new DagligSkæv(startDato, slutDato, laegemiddel, doser);
         
         Patient patient = db.Patienter.Find(patientId);
