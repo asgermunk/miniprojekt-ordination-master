@@ -44,22 +44,21 @@ namespace ordination_test
         }
 
         [TestMethod]
-        public void TC3_OpretDosis_AddsCorrectlyToList()
+        public void TC3_OpretDosis_CountsNumberOfDoses()
         {
             var dagligSkaev = new DagligSkæv(
                 new DateTime(2025, 5, 1), 
                 new DateTime(2025, 5, 1), 
                 GetDummyLaegemiddel());
 
-            dagligSkaev.opretDosis(new DateTime(2025, 7, 12), 1);   
-            dagligSkaev.opretDosis(new DateTime(2025, 2, 2), 1);   
-            dagligSkaev.opretDosis(new DateTime(2025, 5, 5), 1);  
-            dagligSkaev.opretDosis(new DateTime(2025, 6, 19), 1);  
+            dagligSkaev.opretDosis(new DateTime(2025, 7, 12), 5);   
+            dagligSkaev.opretDosis(new DateTime(2025, 2, 2), 8);   
+            dagligSkaev.opretDosis(new DateTime(2025, 5, 5), 2);  
+            dagligSkaev.opretDosis(new DateTime(2025, 6, 19), 3);  
 
-           
-            double result = dagligSkaev.doser.Sum(d => d.antal);
-            
-            Assert.AreEqual(4, result);
+            int antalDoser = dagligSkaev.doser.Count;
+
+            Assert.AreEqual(4, antalDoser);  
         }
 
 
@@ -72,14 +71,14 @@ namespace ordination_test
                 new DateTime(2025, 1, 1),
                 GetDummyLaegemiddel());
 
-            dagligSkaev.opretDosis(new DateTime(2025, 1,1 ),1); 
-            dagligSkaev.opretDosis(new DateTime(2025, 1, 1), 1); 
-            dagligSkaev.opretDosis(new DateTime(2025, 1, 1), 1); 
-            dagligSkaev.opretDosis(new DateTime(2025, 1, 2), 1); 
+            dagligSkaev.opretDosis(new DateTime(2025, 1,1 ),5); 
+            dagligSkaev.opretDosis(new DateTime(2025, 1, 1), 8); 
+            dagligSkaev.opretDosis(new DateTime(2025, 1, 1), 2); 
+            dagligSkaev.opretDosis(new DateTime(2025, 1, 2), 3); 
 
             double result = dagligSkaev.doegnDosis();
 
-            Assert.AreEqual(4, result);
+            Assert.AreEqual(18, result);
         }
     }
 }
