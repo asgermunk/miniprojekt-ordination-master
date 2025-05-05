@@ -42,6 +42,7 @@ namespace ordination_test
                 dagligSkaev.opretDosis(new DateTime(2025, 7, 2), -1.0); 
             });
         }
+        
 
         [TestMethod]
         public void TC3_OpretDosis_CountsNumberOfDoses()
