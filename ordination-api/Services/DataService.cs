@@ -175,8 +175,16 @@ public class DataService
     }
 
     public string AnvendOrdination(int id, Dato dato) {
-        // TODO: Implement!
-        return null!;
+        var ordination = db.PNs.Find(id);
+        if (ordination == null) {
+            throw new ArgumentException("Ordinationen findes ikke.");
+        }
+        if (dato.dato < ordination.startDen || dato.dato > ordination.slutDen) {
+            throw new ArgumentException("Datoen er uden for ordinationens gyldighedsperiode.");
+        }
+        ordination.givDosis(dato);
+        db.SaveChanges();
+        return "Dosis givet.";
     }
 
     /// <summary>
