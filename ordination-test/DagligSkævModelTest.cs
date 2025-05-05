@@ -30,6 +30,7 @@ namespace ordination_test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void TC2_SamletDosis_NegativeDose_ThrowsException()
         {
             var dagligSkaev = new DagligSkæv(
@@ -37,10 +38,9 @@ namespace ordination_test
                 new DateTime(2025, 1, 3),
                 GetDummyLaegemiddel());
 
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
+            
                 dagligSkaev.opretDosis(new DateTime(2025, 7, 2), -1.0); 
-            });
+           
         }
         
 
