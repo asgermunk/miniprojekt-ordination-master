@@ -21,7 +21,7 @@ public class DataService
     public void SeedData() {
 
         // Patients
-        Patient[] patients = new Patient[5];
+        Patient[] patients = new Patient[8];
         patients[0] = db.Patienter.FirstOrDefault()!;
 
         if (patients[0] == null)
@@ -31,12 +31,19 @@ public class DataService
             patients[2] = new Patient("050972-1233", "Hans Jørgensen", 89.4);
             patients[3] = new Patient("011064-1522", "Ulla Nielsen", 59.9);
             patients[4] = new Patient("123456-1234", "Ib Hansen", 87.7);
+            patients[5] = new Patient("010101-1234", "Peter Sørensen", 70.0);
+            patients[6] = new Patient("020202-1234", "Lone Jensen", 20.0);
+            patients[7] = new Patient("030303-1234", "Kurt Nielsen", 125.0);
+           
 
             db.Patienter.Add(patients[0]);
             db.Patienter.Add(patients[1]);
             db.Patienter.Add(patients[2]);
             db.Patienter.Add(patients[3]);
             db.Patienter.Add(patients[4]);
+            db.Patienter.Add(patients[5]);
+            db.Patienter.Add(patients[6]);
+            db.Patienter.Add(patients[7]);
             db.SaveChanges();
         }
 
@@ -129,9 +136,13 @@ public class DataService
     public List<Laegemiddel> GetLaegemidler() {
         return db.Laegemiddler.ToList();
     }
+ 
 
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato) {
         PN newPN = new PN(startDato, slutDato, antal, db.Laegemiddler.Find(laegemiddelId)!);
+        if(antal <= 0) {
+            throw new ArgumentException("Antal skal være større end 0.");
+        }
         Patient patient = db.Patienter.Find(patientId)!;
         patient.ordinationer.Add(newPN);
         
@@ -157,7 +168,9 @@ public class DataService
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
         var laegemiddel = db.Laegemiddler.Find(laegemiddelId)!; 
-
+        if(startDato > slutDato) {
+            throw new ArgumentException("Startdato skal være før slutdato.");
+        }
         var dagligSkaev = new DagligSkæv(startDato, slutDato, laegemiddel, doser);
         
         Patient patient = db.Patienter.Find(patientId);
@@ -169,8 +182,16 @@ public class DataService
     }
 
     public string AnvendOrdination(int id, Dato dato) {
-        // TODO: Implement!
-        return null!;
+        var ordination = db.PNs.Find(id);
+        if (ordination == null) {
+            throw new ArgumentException("Ordinationen findes ikke.");
+        }
+        if (dato.dato < ordination.startDen || dato.dato > ordination.slutDen) {
+            throw new ArgumentException("Datoen er uden for ordinationens gyldighedsperiode.");
+        }
+        ordination.givDosis(dato);
+        db.SaveChanges();
+        return "Dosis givet.";
     }
 
     /// <summary>
