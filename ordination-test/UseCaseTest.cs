@@ -37,7 +37,17 @@ public class UseCaseTest
     [TestMethod]
     public void AnbefaletDosis()
     {
-        //TODO: Implement this test case.
+        Patient patientNormal = service.GetPatienter().First(p => p.PatientId == 6);
+        Patient patientlet = service.GetPatienter().First(p => p.PatientId == 7);
+        Patient patienttung = service.GetPatienter().First(p => p.PatientId == 8);
+
+        
+
+        Assert.AreEqual(3, service.GetAnbefaletDosisPerDøgn(patientlet.PatientId, 1));
+        Assert.AreEqual(10.5, service.GetAnbefaletDosisPerDøgn(patientNormal.PatientId, 1));
+        Assert.AreEqual(20, service.GetAnbefaletDosisPerDøgn(patienttung.PatientId, 1));
+       
+             
     }   
 
     [TestMethod]
