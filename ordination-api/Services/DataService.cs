@@ -165,11 +165,25 @@ public class DataService
     
         return dagligFast;
     }
+    public Patient OpretPatient(string cprnr, string navn, double vaegt) {
+        if (db.Patienter.Any(p => p.cprnr == cprnr)) {
+            throw new ArgumentException("Patient med dette CPR-nummer findes allerede.");
+        }
+        var patient = new Patient(cprnr, navn, vaegt);
+        db.Patienter.Add(patient);
+        db.SaveChanges();
+        return patient;
+    }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
         var laegemiddel = db.Laegemiddler.Find(laegemiddelId)!; 
         if(startDato > slutDato) {
             throw new ArgumentException("Startdato skal være før slutdato.");
+        }
+        foreach (var dosis in doser) {
+            if(dosis.antal <= 0) {
+                throw new ArgumentException("Dosis skal være større end 0.");
+            }
         }
         var dagligSkaev = new DagligSkæv(startDato, slutDato, laegemiddel, doser);
         

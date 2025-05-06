@@ -92,4 +92,16 @@ public class ServiceTest
 
         Assert.AreEqual(5, service.GetPNs().Count());
     }
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void OpretPatientMedSammeCPR()
+    {
+        Patient patient1 = new Patient("1234567890", "Test1", 70.0);
+        Patient patient2 = new Patient("1234567890", "Test2", 70.0); // Duplicate CPR number);
+        
+        service.OpretPatient(patient1.cprnr, patient1.navn, patient1.vaegt);
+        service.OpretPatient(patient2.cprnr, patient2.navn, patient2.vaegt); // This should throw an exception
+
+        
+    }
 }
